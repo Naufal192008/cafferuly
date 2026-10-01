@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAW Farm Coffee Roaster - Kopi Premium Dari Kebun Sendiri</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3E2723',
+                        secondary: '#8D6E63',
+                        accent: '#D7CCC8',
+                        gold: '#FFB74D',
+                        coffee: {
+                            50: '#EFEBE9',
+                            100: '#D7CCC8',
+                            200: '#BCAAA4',
+                            300: '#A1887F',
+                            400: '#8D6E63',
+                            500: '#795548',
+                            600: '#6D4C41',
+                            700: '#5D4037',
+                            800: '#4E342E',
+                            900: '#3E2723',
+                        }
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            }
+            .parallax {
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .typing-cursor::after {
+                content: '|';
+                animation: blink 1s infinite;
+            }
+            @keyframes blink {
+                0%, 50% { opacity: 1; }
+                51%, 100% { opacity: 0; }
+            }
+            .scroll-indicator {
+                animation: bounce 2s infinite;
+            }
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                60% { transform: translateY(-5px); }
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .timeline-line {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 100%;
+                width: 2px;
+                background: linear-gradient(to bottom, #8D6E63, #FFB74D);
+            }
+            @media (max-width: 768px) {
+                .timeline-line {
+                    left: 20px;
+                }
+            }
+        }
+    </style>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8D6E63;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5D4037;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lightbox-close:hover {
+            color: #FFB74D;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .cart-modal.active {
+            transform: translateX(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="font-poppins bg-coffee-50 dark:bg-gray-900 text-coffee-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 lg:px-12">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2">
+                <i class="fas fa-mug-hot text-gold text-2xl"></i>
+                <span class="font-playfair font-bold text-xl lg:text-2xl text-white text-shadow">YAW Farm Coffee</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="text-white hover:text-gold transition-colors">Beranda</a>
+                <a href="#about" class="text-white hover:text-gold transition-colors">Tentang Kami</a>
+                <a href="#process" class="text-white hover:text-gold transition-colors">Proses</a>
+                <a href="#products" class="text-white hover:text-gold transition-colors">Produk</a>
+                <a href="#gallery" class="text-white hover:text-gold transition-colors">Galeri</a>
+                <a href="#contact" class="text-white hover:text-gold transition-colors">Kontak</a>
+                
+                <button id="darkModeToggle" class="text-white hover:text-gold transition-colors p-2">
+                    <i class="fas fa-moon text-xl"></i>
+                </button>
+                
+                <button id="cartToggle" class="relative text-white hover:text-gold transition-colors p-2">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-gold text-coffee-900 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="flex md:hidden items-center gap-4">
+                <button id="darkModeToggleMobile" class="text-white hover:text-gold transition-colors">
+                    <i class="fas fa-moon text-xl"></i>
+                </button>
+                <button id="cartToggleMobile" class="relative text-white hover:text-gold transition-colors">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cartCountMobile" class="absolute -top-1 -right-1 bg-gold text-coffee-900 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="mobileMenuBtn" class="text-white text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobileMenu" class="mobile-menu fixed top-0 left-0 h-full w-3/4 max-w-sm bg-coffee-900 z-50 shadow-xl p-6">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-mug-hot text-gold text-2xl"></i>
+                <span class="font-playfair font-bold text-xl text-white">YAW Coffee</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white text-2xl">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-6">
+            <a href="#home" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">Beranda</a>
+            <a href="#about" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">Tentang Kami</a>
+            <a href="#process" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">Proses Roasting</a>
+            <a href="#products" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">Produk Kami</a>
+            <a href="#gallery" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">Galeri</a>
+            <a href="#faq" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">FAQ</a>
+            <a href="#contact" class="text-white hover:text-gold transition-colors py-2 border-b border-coffee-700">Kontak</a>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal fixed top-0 right-0 h-full w-full max-w-md bg-white dark:bg-gray-800 z-50 shadow-2xl p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-playfair font-bold text-2xl text-coffee-900 dark:text-white">Keranjang Belanja</h3>
+            <button id="closeCart" class="text-coffee-700 dark:text-gray-300 text-2xl hover:text-gold transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="cartItems" class="space-y-4 mb-6">
+            <p class="text-center text-gray-500 dark:text-gray-400 py-8">Keranjang Anda masih kosong</p>
+        </div>
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <div class="flex justify-between font-bold text-xl mb-4">
+                <span>Total:</span>
+                <span id="cartTotal" class="text-gold">Rp 0</span>
+            </div>
+            <button class="w-full bg-gold hover:bg-yellow-500 text-coffee-900 font-bold py-3 rounded-lg transition-colors">
+                Checkout Sekarang
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="parallax min-h-screen flex items-center justify-center relative" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        <div class="container mx-auto px-6 text-center" data-aos="fade-up" data-aos-duration="1000">
+            <h1 class="font-playfair font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-6 text-shadow">
+                Nikmati Kopi Premium<br>Dari Kebun Sendiri
+            </h1>
+            <p id="typingText" class="text-lg md:text-xl text-accent mb-10 max-w-2xl mx-auto typing-cursor">
+                Kami menyajikan kopi berkualitas tinggi dengan proses roasting yang sempurna
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#products" class="bg-gold hover:bg-yellow-500 text-coffee-900 font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg">
+                    Lihat Produk Kami
+                </a>
+                <a href="#about" class="bg-transparent border-2 border-white hover:bg-white/10 text-white font-bold py-3 px-8 rounded-full transition-all">
+                    Tentang Kami
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-indicator">
+            <a href="#about" class="text-white text-3xl">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 lg:px-12 bg-white dark:bg-gray-800">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right" data-aos-duration="1000">
+                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Perkebunan Kopi YAW Farm" class="rounded-2xl shadow-2xl w-full">
+                    <div class="flex gap-4 mt-4">
+                        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Biji Kopi" class="rounded-xl w-1/3 h-32 object-cover shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Proses Roasting" class="rounded-xl w-1/3 h-32 object-cover shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Cangkir Kopi" class="rounded-xl w-1/3 h-32 object-cover shadow-lg">
+                    </div>
+                </div>
+                <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                    <span class="text-gold font-semibold uppercase tracking-wider">Tentang Kami</span>
+                    <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 mb-6 text-coffee-900 dark:text-white">
+                        Perkebunan Kopi Keluarga Sejak 1985
+                    </h2>
+                    <p class="text-coffee-700 dark:text-gray-300 mb-4 leading-relaxed">
+                        YAW Farm Coffee Roaster adalah perusahaan kopi keluarga yang berawal dari perkebunan kecil di daerah Dataran Tinggi Gayo, Aceh. Selama lebih dari 35 tahun, kami berkomitmen untuk menghasilkan kopi berkualitas tinggi dengan proses yang berkelanjutan.
+                    </p>
+                    <p class="text-coffee-700 dark:text-gray-300 mb-6 leading-relaxed">
+                        Kami mengontrol seluruh proses mulai dari penanaman biji kopi, pemanenan, pengolahan, hingga roasting yang dilakukan oleh ahli roaster berpengalaman. Setiap cangkir kopi yang Anda nikmati adalah hasil dari dedikasi dan cinta kami terhadap kopi.
+                    </p>
+                    <div class="grid grid-cols-3 gap-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-gold mb-1">35+</div>
+                            <div class="text-sm text-coffee-600 dark:text-gray-400">Tahun Pengalaman</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-gold mb-1">50+</div>
+                            <div class="text-sm text-coffee-600 dark:text-gray-400">Variasi Kopi</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-gold mb-1">10K+</div>
+                            <div class="text-sm text-coffee-600 dark:text-gray-400">Pelanggan Puas</div>
+                        </div>
+                    </div>
+                    <a href="#products" class="inline-block bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-3 px-6 rounded-full transition-colors">
+                        Selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-20 px-6 lg:px-12 bg-coffee-50 dark:bg-gray-900">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-gold font-semibold uppercase tracking-wider">Proses Kami</span>
+                <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 text-coffee-900 dark:text-white">
+                    Proses Roasting Yang Sempurna
+                </h2>
+                <p class="max-w-2xl mx-auto mt-4 text-coffee-700 dark:text-gray-300">
+                    Setiap biji kopi kami proses dengan hati-hati untuk menghasilkan cita rasa yang optimal
+                </p>
+            </div>
+
+            <div class="relative max-w-4xl mx-auto">
+                <div class="timeline-line hidden md:block"></div>
+                
+                <div class="space-y-12 md:space-y-0">
+                    <!-- Step 1 -->
+                    <div class="md:flex items-center" data-aos="fade-up" data-aos-duration="800">
+                        <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover">
+                                <div class="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mb-4 md:ml-auto">
+                                    <i class="fas fa-seedling text-2xl text-gold"></i>
+                                </div>
+                                <h3 class="font-playfair font-bold text-xl mb-2 text-coffee-900 dark:text-white">Pemilihan Biji Premium</h3>
+                                <p class="text-coffee-700 dark:text-gray-300">
+                                    Biji kopi dipilih secara manual oleh tim ahli kami, hanya biji berkualitas tinggi yang lolos seleksi.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gold rounded-full flex items-center justify-center text-coffee-900 font-bold text-xl z-10">
+                            1
+                        </div>
+                        <div class="md:w-1/2 md:pl-12"></div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="md:flex items-center mt-0 md:mt-[-80px]" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                        <div class="md:w-1/2 md:pr-12"></div>
+                        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gold rounded-full flex items-center justify-center text-coffee-900 font-bold text-xl z-10">
+                            2
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 mb-6 md:mb-0">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover">
+                                <div class="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-fire text-2xl text-gold"></i>
+                                </div>
+                                <h3 class="font-playfair font-bold text-xl mb-2 text-coffee-900 dark:text-white">Proses Roasting</h3>
+                                <p class="text-coffee-700 dark:text-gray-300">
+                                    Biji kopi dipanggang dengan suhu dan waktu yang presisi oleh roaster ahli untuk mengeluarkan aroma dan cita rasa terbaik.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="md:flex items-center mt-0 md:mt-[-80px]" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                        <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover">
+                                <div class="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mb-4 md:ml-auto">
+                                    <i class="fas fa-snowflake text-2xl text-gold"></i>
+                                </div>
+                                <h3 class="font-playfair font-bold text-xl mb-2 text-coffee-900 dark:text-white">Pendinginan & Penyortiran</h3>
+                                <p class="text-coffee-700 dark:text-gray-300">
+                                    Setelah roasting, biji kopi didinginkan secara alami dan disortir kembali untuk memastikan kualitas yang konsisten.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gold rounded-full flex items-center justify-center text-coffee-900 font-bold text-xl z-10">
+                            3
+                        </div>
+                        <div class="md:w-1/2 md:pl-12"></div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="md:flex items-center mt-0 md:mt-[-80px]" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
+                        <div class="md:w-1/2 md:pr-12"></div>
+                        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gold rounded-full flex items-center justify-center text-coffee-900 font-bold text-xl z-10">
+                            4
+                        </div>
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg card-hover">
+                                <div class="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-box text-2xl text-gold"></i>
+                                </div>
+                                <h3 class="font-playfair font-bold text-xl mb-2 text-coffee-900 dark:text-white">Packing & Pengiriman</h3>
+                                <p class="text-coffee-700 dark:text-gray-300">
+                                    Kopi dikemas dengan kemasan kedap udara untuk menjaga kesegaran, lalu dikirimkan langsung ke pintu Anda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 px-6 lg:px-12 bg-white dark:bg-gray-800">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-gold font-semibold uppercase tracking-wider">Produk Kami</span>
+                <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 text-coffee-900 dark:text-white">
+                    Koleksi Kopi Premium
+                </h2>
+                <p class="max-w-2xl mx-auto mt-4 text-coffee-700 dark:text-gray-300">
+                    Pilih kopi favorit Anda dari berbagai varian yang kami sediakan
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="bg-coffee-50 dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover" data-aos="fade-up" data-aos-duration="800">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kopi Arabika Gayo" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-gold text-coffee-900 font-bold px-3 py-1 rounded-full text-sm">
+                            Best Seller
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-xl text-coffee-900 dark:text-white">Arabika Gayo</h3>
+                                <p class="text-sm text-coffee-600 dark:text-gray-400">Aceh, Indonesia</p>
+                            </div>
+                            <div class="text-gold font-bold text-lg">Rp 125.000</div>
+                        </div>
+                        <p class="text-coffee-700 dark:text-gray-300 mb-4 text-sm">
+                            Kopi arabika dengan cita rasa fruity, asam yang seimbang, dan aroma floral yang khas. Cocok untuk Anda yang menyukai kopi dengan karakter kuat.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">Medium Roast</span>
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">250gr</span>
+                        </div>
+                        <button class="add-to-cart w-full bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-2 rounded-lg transition-colors" 
+                                data-id="1" data-name="Arabika Gayo" data-price="125000" data-image="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
+                            <i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="bg-coffee-50 dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kopi Robusta Lampung" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-xl text-coffee-900 dark:text-white">Robusta Lampung</h3>
+                                <p class="text-sm text-coffee-600 dark:text-gray-400">Lampung, Indonesia</p>
+                            </div>
+                            <div class="text-gold font-bold text-lg">Rp 85.000</div>
+                        </div>
+                        <p class="text-coffee-700 dark:text-gray-300 mb-4 text-sm">
+                            Kopi robusta dengan rasa yang kuat, sedikit pahit, dan kandungan kafein tinggi. Cocok untuk Anda yang menyukai kopi dengan body yang berat.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">Dark Roast</span>
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">250gr</span>
+                        </div>
+                        <button class="add-to-cart w-full bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-2 rounded-lg transition-colors"
+                                data-id="2" data-name="Robusta Lampung" data-price="85000" data-image="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
+                            <i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="bg-coffee-50 dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kopi Arabika Toraja" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-red-500 text-white font-bold px-3 py-1 rounded-full text-sm">
+                            New
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-xl text-coffee-900 dark:text-white">Arabika Toraja</h3>
+                                <p class="text-sm text-coffee-600 dark:text-gray-400">Sulawesi, Indonesia</p>
+                            </div>
+                            <div class="text-gold font-bold text-lg">Rp 135.000</div>
+                        </div>
+                        <p class="text-coffee-700 dark:text-gray-300 mb-4 text-sm">
+                            Kopi arabika premium dari Sulawesi dengan cita rasa earthy, sedikit rempah, dan aftertaste yang manis. Cocok untuk para pecinta kopi sejati.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">Medium-Dark Roast</span>
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">250gr</span>
+                        </div>
+                        <button class="add-to-cart w-full bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-2 rounded-lg transition-colors"
+                                data-id="3" data-name="Arabika Toraja" data-price="135000" data-image="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
+                            <i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="bg-coffee-50 dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kopi Arabika Bali Kintamani" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-xl text-coffee-900 dark:text-white">Arabika Bali Kintamani</h3>
+                                <p class="text-sm text-coffee-600 dark:text-gray-400">Bali, Indonesia</p>
+                            </div>
+                            <div class="text-gold font-bold text-lg">Rp 115.000</div>
+                        </div>
+                        <p class="text-coffee-700 dark:text-gray-300 mb-4 text-sm">
+                            Kopi arabika dengan cita rasa citrus, sedikit manis seperti madu, dan aroma yang segar. Cocok untuk Anda yang menyukai kopi dengan keasaman ringan.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">Light Roast</span>
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">250gr</span>
+                        </div>
+                        <button class="add-to-cart w-full bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-2 rounded-lg transition-colors"
+                                data-id="4" data-name="Arabika Bali Kintamani" data-price="115000" data-image="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
+                            <i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="bg-coffee-50 dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kopi Kopi Tubruk" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-xl text-coffee-900 dark:text-white">Kopi Tubruk Special</h3>
+                                <p class="text-sm text-coffee-600 dark:text-gray-400">Campuran Premium</p>
+                            </div>
+                            <div class="text-gold font-bold text-lg">Rp 75.000</div>
+                        </div>
+                        <p class="text-coffee-700 dark:text-gray-300 mb-4 text-sm">
+                            Campuran kopi robusta dan arabika pilihan, cocok untuk diseduh dengan cara tubruk. Rasa yang kuat dengan aroma yang harum.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">Dark Roast</span>
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">500gr</span>
+                        </div>
+                        <button class="add-to-cart w-full bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-2 rounded-lg transition-colors"
+                                data-id="5" data-name="Kopi Tubruk Special" data-price="75000" data-image="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
+                            <i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="bg-coffee-50 dark:bg-gray-700 rounded-2xl overflow-hidden shadow-lg card-hover" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kopi Arabika Java Preanger" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4 bg-gold text-coffee-900 font-bold px-3 py-1 rounded-full text-sm">
+                            Limited
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-xl text-coffee-900 dark:text-white">Arabika Java Preanger</h3>
+                                <p class="text-sm text-coffee-600 dark:text-gray-400">Jawa Barat, Indonesia</p>
+                            </div>
+                            <div class="text-gold font-bold text-lg">Rp 145.000</div>
+                        </div>
+                        <p class="text-coffee-700 dark:text-gray-300 mb-4 text-sm">
+                            Kopi arabika langka dari dataran tinggi Jawa Barat dengan cita rasa yang kompleks, fruity, dan aftertaste seperti cokelat. Stok terbatas!
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">Medium Roast</span>
+                            <span class="text-xs bg-coffee-200 dark:bg-gray-600 text-coffee-800 dark:text-gray-200 px-2 py-1 rounded-full">250gr</span>
+                        </div>
+                        <button class="add-to-cart w-full bg-coffee-800 hover:bg-coffee-900 text-white font-semibold py-2 rounded-lg transition-colors"
+                                data-id="6" data-name="Arabika Java Preanger" data-price="145000" data-image="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
+                            <i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 px-6 lg:px-12 bg-coffee-50 dark:bg-gray-900">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-gold font-semibold uppercase tracking-wider">Galeri</span>
+                <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 text-coffee-900 dark:text-white">
+                    Momen-momen Di Kebun & Roastery Kami
+                </h2>
+                <p class="max-w-2xl mx-auto mt-4 text-coffee-700 dark:text-gray-300">
+                    Lihat langsung aktivitas di perkebunan dan proses pembuatan kopi kami
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img src="https://images.unsplash.com/photo-1540648639573-8c848de23f0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Perkebunan Kopi" class="gallery-img rounded-lg w-full h-48 object-cover cursor-pointer transition-transform hover:scale-105" data-aos="zoom-in" data-aos-duration="500">
+                <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Pemanenan Kopi" class="gallery-img rounded-lg w-full h-64 object-cover cursor-pointer transition-transform hover:scale-105 md:row-span-2" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100">
+                <img src="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Biji Kopi" class="gallery-img rounded-lg w-full h-48 object-cover cursor-pointer transition-transform hover:scale-105" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200">
+                <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Proses Roasting" class="gallery-img rounded-lg w-full h-48 object-cover cursor-pointer transition-transform hover:scale-105" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="300">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cangkir Kopi" class="gallery-img rounded-lg w-full h-48 object-cover cursor-pointer transition-transform hover:scale-105" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="400">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Kebun Kopi" class="gallery-img rounded-lg w-full h-64 object-cover cursor-pointer transition-transform hover:scale-105 md:col-span-2" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="500">
+                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Mesin Roasting" class="gallery-img rounded-lg w-full h-48 object-cover cursor-pointer transition-transform hover:scale-105" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="600">
+                <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Barista" class="gallery-img rounded-lg w-full h-48 object-cover cursor-pointer transition-transform hover:scale-105" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="700">
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightboxImg" src="" alt="Gallery Image">
+    </div>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 px-6 lg:px-12 bg-white dark:bg-gray-800">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-gold font-semibold uppercase tracking-wider">Testimoni</span>
+                <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 text-coffee-900 dark:text-white">
+                    Apa Kata Pelanggan Kami
+                </h2>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div id="testimonialSlider" class="relative overflow-hidden">
+                    <div class="testimonial-wrapper flex transition-transform duration-700">
+                        <!-- Testimonial 1 -->
+                        <div class="w-full flex-shrink-0 px-4">
+                            <div class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl shadow-lg text-center" data-aos="fade-up">
+                                <div class="text-gold mb-4">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-coffee-700 dark:text-gray-300 italic mb-6 text-lg">
+                                    "Kopi Arabika Gayonya luar biasa! Rasanya sangat khas dan berbeda dengan kopi lain yang pernah saya coba. Aromanya juga sangat harum saat diseduh. Sekarang sudah jadi langganan rutin saya."
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto Pelanggan" class="w-16 h-16 rounded-full object-cover border-2 border-gold">
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-coffee-900 dark:text-white">Budi Santoso</h4>
+                                        <p class="text-sm text-coffee-600 dark:text-gray-400">Pecinta Kopi, Jakarta</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 2 -->
+                        <div class="w-full flex-shrink-0 px-4">
+                            <div class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl shadow-lg text-center" data-aos="fade-up">
+                                <div class="text-gold mb-4">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-coffee-700 dark:text-gray-300 italic mb-6 text-lg">
+                                    "Saya sudah mencoba berbagai macam kopi dari berbagai daerah, tapi Arabika Toraja dari YAW Farm ini adalah yang terbaik. Cita rasanya sangat kompleks dan unik. Pengirimannya juga cepat dan kemasannya bagus."
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto Pelanggan" class="w-16 h-16 rounded-full object-cover border-2 border-gold">
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-coffee-900 dark:text-white">Siti Rahayu</h4>
+                                        <p class="text-sm text-coffee-600 dark:text-gray-400">Owner Cafe, Bandung</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 3 -->
+                        <div class="w-full flex-shrink-0 px-4">
+                            <div class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl shadow-lg text-center" data-aos="fade-up">
+                                <div class="text-gold mb-4">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <p class="text-coffee-700 dark:text-gray-300 italic mb-6 text-lg">
+                                    "Kopi Tubruk Specialnya sangat cocok untuk selera saya. Rasanya kuat tapi tidak pahit berlebihan. Harganya juga terjangkau untuk kualitas yang sebaik ini. Rekomendasi banget untuk pecinta kopi tubruk!"
+                                </p>
+                                <div class="flex items-center justify-center gap-4">
+                                    <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Foto Pelanggan" class="w-16 h-16 rounded-full object-cover border-2 border-gold">
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-coffee-900 dark:text-white">Pak Hadi</h4>
+                                        <p class="text-sm text-coffee-600 dark:text-gray-400">Wirausahawan, Surabaya</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slider Controls -->
+                    <button id="prevTestimonial" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white dark:bg-gray-600 shadow-lg w-12 h-12 rounded-full flex items-center justify-center text-coffee-800 dark:text-white hover:bg-gold transition-colors z-10">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="nextTestimonial" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white dark:bg-gray-600 shadow-lg w-12 h-12 rounded-full flex items-center justify-center text-coffee-800 dark:text-white hover:bg-gold transition-colors z-10">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+
+                    <!-- Dots Indicator -->
+                    <div class="flex justify-center gap-2 mt-6">
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gold" data-index="0"></button>
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-coffee-300 dark:bg-gray-600" data-index="1"></button>
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-coffee-300 dark:bg-gray-600" data-index="2"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 px-6 lg:px-12 bg-coffee-50 dark:bg-gray-900">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-gold font-semibold uppercase tracking-wider">FAQ</span>
+                <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 text-coffee-900 dark:text-white">
+                    Pertanyaan Yang Sering Diajukan
+                </h2>
+                <p class="max-w-2xl mx-auto mt-4 text-coffee-700 dark:text-gray-300">
+                    Temukan jawaban untuk pertanyaan umum tentang produk dan layanan kami
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-4">
+                <!-- FAQ 1 -->
+                <div class="faq-item bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden" data-aos="fade-up">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left font-semibold text-coffee-900 dark:text-white">
+                        <span>Berapa lama masa simpan kopi yang baru diroasting?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-6 pb-6 text-coffee-700 dark:text-gray-300">
+                            Kopi yang baru diroasting memiliki masa simpan optimal selama 1-2 bulan jika disimpan di tempat yang sejuk, kering, dan terhindar dari sinar matahari langsung. Kami menyarankan untuk mengonsumsi kopi dalam waktu 2 minggu setelah dibuka untuk mendapatkan cita rasa terbaik.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left font-semibold text-coffee-900 dark:text-white">
+                        <span>Apakah kopi yang dijual adalah kopi yang baru diroasting?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-6 pb-6 text-coffee-700 dark:text-gray-300">
+                            Ya, semua kopi yang kami jual diroasting sesuai pesanan. Kami tidak menyimpan stok kopi yang sudah diroasting lebih dari 3 hari. Anda akan menerima kopi yang masih sangat segar dengan aroma dan cita rasa yang optimal.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left font-semibold text-coffee-900 dark:text-white">
+                        <span>Bisakah saya meminta gilingan kopi sesuai keinginan?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-6 pb-6 text-coffee-700 dark:text-gray-300">
+                            Tentu bisa! Saat checkout, Anda bisa memilih jenis gilingan yang diinginkan, mulai dari very fine (untuk espresso), fine (tubruk), medium (pour over/V60), hingga coarse (french press). Jika tidak memilih, kami akan mengirimkan dalam bentuk biji utuh.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="faq-item bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left font-semibold text-coffee-900 dark:text-white">
+                        <span>Bagaimana cara pemesanan dan pengiriman?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-6 pb-6 text-coffee-700 dark:text-gray-300">
+                            Anda bisa memesan melalui website ini dengan menambahkan produk ke keranjang dan melakukan checkout. Kami menerima pembayaran via transfer bank dan e-wallet. Pengiriman menggunakan jasa kurter JNE, J&T, dan SiCepat dengan perkiraan waktu pengiriman 2-4 hari kerja untuk seluruh Indonesia.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="faq-item bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+                    <button class="faq-question w-full flex justify-between items-center p-6 text-left font-semibold text-coffee-900 dark:text-white">
+                        <span>Apakah ada garansi jika kopi yang diterima cacat atau tidak sesuai?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-6 pb-6 text-coffee-700 dark:text-gray-300">
+                            Kami memberikan garansi 100% kepuasan pelanggan. Jika kopi yang Anda terima cacat, rusak, atau tidak sesuai dengan pesanan, silakan hubungi kami dalam waktu 24 jam setelah barang diterima. Kami akan menggantinya dengan yang baru atau mengembalikan uang Anda secara penuh.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6 lg:px-12 bg-white dark:bg-gray-800">
+        <div class="container mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-gold font-semibold uppercase tracking-wider">Kontak</span>
+                <h2 class="font-playfair font-bold text-3xl md:text-4xl mt-2 text-coffee-900 dark:text-white">
+                    Hubungi Kami
+                </h2>
+                <p class="max-w-2xl mx-auto mt-4 text-coffee-700 dark:text-gray-300">
+                    Ada pertanyaan atau ingin bekerja sama? Silakan hubungi kami melalui form di bawah ini
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <div data-aos="fade-right">
+                    <h3 class="font-playfair font-bold text-2xl mb-6 text-coffee-900 dark:text-white">Informasi Kontak</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-gold text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-coffee-900 dark:text-white mb-1">Alamat</h4>
+                                <p class="text-coffee-700 dark:text-gray-300">
+                                    Jl. Kopi Indonesia No. 123<br>
+                                    Dataran Tinggi Gayo, Aceh<br>
+                                    Indonesia
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-gold text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-coffee-900 dark:text-white mb-1">Telepon / WA</h4>
+                                <p class="text-coffee-700 dark:text-gray-300">+62 812 3456 7890</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-gold text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-coffee-900 dark:text-white mb-1">Email</h4>
+                                <p class="text-coffee-700 dark:text-gray-300">hello@yawfarmcoffee.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock text-gold text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-coffee-900 dark:text-white mb-1">Jam Operasional</h4>
+                                <p class="text-coffee-700 dark:text-gray-300">
+                                    Senin - Jumat: 08.00 - 17.00 WIB<br>
+                                    Sabtu: 09.00 - 15.00 WIB<br>
+                                    Minggu: Tutup
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="font-semibold text-coffee-900 dark:text-white mb-4">Ikuti Kami</h4>
+                        <div class="flex gap-4">
+                            <a href="#" class="w-12 h-12 bg-coffee-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-coffee-800 dark:text-white hover:bg-gold hover:text-coffee-900 transition-colors">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-coffee-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-coffee-800 dark:text-white hover:bg-gold hover:text-coffee-900 transition-colors">
+                                <i class="fab fa-facebook-f text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-coffee-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-coffee-800 dark:text-white hover:bg-gold hover:text-coffee-900 transition-colors">
+                                <i class="fab fa-tiktok text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-coffee-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-coffee-800 dark:text-white hover:bg-gold hover:text-coffee-900 transition-colors">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left">
+                    <form id="contactForm" class="bg-coffee-50 dark:bg-gray-700 p-8 rounded-2xl shadow-lg">
+                        <div class="mb-4">
+                            <label for="name" class="block text-coffee-800 dark:text-gray-200 font-medium mb-2">Nama Lengkap</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg border border-coffee-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-coffee-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-coffee-800 dark:text-gray-200 font-medium mb-2">Email</label>
+                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-coffee-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-coffee-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold">
+                        </div>
+                        <div class="mb-4">
+                            <label for="subject" class="block text-coffee-800 dark:text-gray-200 font-medium mb-2">Subjek</label>
+                            <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 rounded-lg border border-coffee-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-coffee-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold">
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-coffee-800 dark:text-gray-200 font-medium mb-2">Pesan</label>
+                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 rounded-lg border border-coffee-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-coffee-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-gold hover:bg-yellow-500 text-coffee-900 font-bold py-3 rounded-lg transition-colors">
+                            Kirim Pesan <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="mt-16 rounded-2xl overflow-hidden shadow-lg" data-aos="fade-up">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127342.20730773806!2d96.76399345!3d4.62366915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3039e8959979632d%3A0x4039bf547cf5e50!2sDataran%20Tinggi%20Gayo!5e0!3m2!1sid!2sid!4v1689567890123!5m2!1sid!2sid" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-coffee-900 text-white py-12 px-6 lg:px-12">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-mug-hot text-gold text-2xl"></i>
+                        <span class="font-playfair font-bold text-2xl">YAW Farm Coffee Roaster</span>
+                    </div>
+                    <p class="text-coffee-200 mb-4 max-w-md">
+                        Kami adalah produsen kopi premium yang berkomitmen untuk menyajikan kopi berkualitas tinggi dari perkebunan kami sendiri di Dataran Tinggi Gayo, Aceh.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-coffee-200 hover:text-gold transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-coffee-200 hover:text-gold transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-coffee-200 hover:text-gold transition-colors">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                        <a href="#" class="text-coffee-200 hover:text-gold transition-colors">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Link Cepat</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-coffee-200 hover:text-gold transition-colors">Beranda</a></li>
+                        <li><a href="#about" class="text-coffee-200 hover:text-gold transition-colors">Tentang Kami</a></li>
+                        <li><a href="#products" class="text-coffee-200 hover:text-gold transition-colors">Produk</a></li>
+                        <li><a href="#gallery" class="text-coffee-200 hover:text-gold transition-colors">Galeri</a></li>
+                        <li><a href="#contact" class="text-coffee-200 hover:text-gold transition-colors">Kontak</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Kontak</h4>
+                    <ul class="space-y-2 text-coffee-200">
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-map-marker-alt text-gold"></i>
+                            <span>Aceh, Indonesia</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-phone text-gold"></i>
+                            <span>+62 812 3456 7890</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fas fa-envelope text-gold"></i>
+                            <span>hello@yawfarmcoffee.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-coffee-800 pt-8 text-center text-coffee-300">
+                <p>&copy; 2024 YAW Farm Coffee Roaster. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-6 right-6 bg-gold text-coffee-900 w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all hover:bg-yellow-500 z-40">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            once: true,
+            duration: 800,
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-coffee-900/95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.remove('bg-coffee-900/95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
+                navbar.classList.add('py-4');
+            }
+
+            // Back to top button
+            if (window.scrollY > 300) {
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+
+        // Back to top function
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
+        const htmlElement = document.documentElement;
+
+        // Check for saved preference or system preference
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            updateDarkModeIcon(true);
+        }
+
+        function toggleDarkMode() {
+            const isDark = htmlElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            updateDarkModeIcon(isDark);
+        }
+
+        function updateDarkModeIcon(isDark) {
+            const icon = isDark ? 'fa-sun' : 'fa-moon';
+            darkModeToggle.querySelector('i').className = `fas ${icon} text-xl`;
+            darkModeToggleMobile.querySelector('i').className = `fas ${icon} text-xl`;
+        }
+
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        darkModeToggleMobile.addEventListener('click', toggleDarkMode);
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenuFn() {
+            mobileMenu.classList.remove('active');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        closeMobileMenu.addEventListener('click', closeMobileMenuFn);
+        overlay.addEventListener('click', closeMobileMenuFn);
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', closeMobileMenuFn);
+        });
+
+        // Typing Effect
+        const typingText = document.getElementById('typingText');
+        const textArray = [
+            "Kami menyajikan kopi berkualitas tinggi dengan proses roasting yang sempurna",
+            "Ditanam di dataran tinggi dengan kualitas terbaik",
+            "Dipanggang oleh ahli roaster berpengalaman",
+            "Dikirimkan segar langsung ke pintu Anda"
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const currentText = textArray[textIndex];
+            
+            if (isDeleting) {
+                typingText.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingText.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % textArray.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        setTimeout(typeEffect, 1000);
+
+        // Cart Functionality
+        let cart = [];
+        const cartToggle = document.getElementById('cartToggle');
+        const cartToggleMobile = document.getElementById('cartToggleMobile');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartCount = document.getElementById('cartCount');
+        const cartCountMobile = document.getElementById('cartCountMobile');
+
+        function openCart() {
+            cartModal.classList.add('active');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartFn() {
+            cartModal.classList.remove('active');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        cartToggle.addEventListener('click', openCart);
+        cartToggleMobile.addEventListener('click', openCart);
+        closeCart.addEventListener('click', closeCartFn);
+        overlay.addEventListener('click', closeCartFn);
+
+        // Add to cart
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.dataset.id;
+                const name = button.dataset.name;
+                const price = parseInt(button.dataset.price);
+                const image = button.dataset.image;
+
+                const existingItem = cart.find(item => item.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ id, name, price, image, quantity: 1 });
+                }
+
+                updateCart();
+                openCart();
+
+                // Animation feedback
+                button.innerHTML = '<i class="fas fa-check mr-2"></i> Ditambahkan!';
+                button.classList.add('bg-green-600');
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-cart-plus mr-2"></i> Tambah Ke Keranjang';
+                    button.classList.remove('bg-green-600');
+                }, 2000);
+            });
+        });
+
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            cartCount.textContent = totalItems;
+            cartCountMobile.textContent = totalItems;
+            cartTotal.textContent = formatRupiah(totalPrice);
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 py-8">Keranjang Anda masih kosong</p>';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex gap-4 items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-coffee-900 dark:text-white">${item.name}</h4>
+                            <p class="text-gold font-medium">${formatRupiah(item.price)}</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <button class="decrease-qty w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded flex items-center justify-center text-sm" data-id="${item.id}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="text-coffee-800 dark:text-gray-200">${item.quantity}</span>
+                                <button class="increase-qty w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded flex items-center justify-center text-sm" data-id="${item.id}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+
+                // Add event listeners for quantity buttons
+                document.querySelectorAll('.decrease-qty').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const item = cart.find(item => item.id === id);
+                        if (item.quantity > 1) {
+                            item.quantity--;
+                        } else {
+                            cart = cart.filter(item => item.id !== id);
+                        }
+                        updateCart();
+                    });
+                });
+
+                document.querySelectorAll('.increase-qty').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const item = cart.find(item => item.id === id);
+                        item.quantity++;
+                        updateCart();
+                    });
+                });
+
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        cart = cart.filter(item => item.id !== id);
+                        updateCart();
+                    });
+                });
+            }
+        }
+
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        // Lightbox Gallery
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.querySelector('.lightbox-close');
+
+        document.querySelectorAll('.gallery-img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Testimonial Slider
+        const testimonialWrapper = document.querySelector('.testimonial-wrapper');
+        const prevBtn = document.getElementById('prevTestimonial');
+        const nextBtn = document.getElementById('nextTestimonial');
+        const dots = document.querySelectorAll('.testimonial-dot');
+        let currentSlide = 0;
+        const totalSlides = 3;
+
+        function updateSlider() {
+            testimonialWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.remove('bg-coffee-300', 'dark:bg-gray-600');
+                    dot.classList.add('bg-gold');
+                } else {
+                    dot.classList.add('bg-coffee-300', 'dark:bg-gray-600');
+                    dot.classList.remove('bg-gold');
+                }
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        });
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                currentSlide = parseInt(dot.dataset.index);
+                updateSlider();
+            });
+        });
+
+        // Auto slide
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        }, 5000);
+
+        // FAQ Accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                
+                // Close other FAQs
+                faqQuestions.forEach(q => {
+                    if (q !== question) {
+                        q.nextElementSibling.style.maxHeight = null;
+                        q.querySelector('i').style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Toggle current FAQ
+                if (answer.style.maxHeight) {
+                    answer.style.maxHeight = null;
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // Contact Form
+        const contactForm = document.getElementById('contactForm');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simulate form submission
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mengirim...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Pesan Terkirim!';
+                submitBtn.classList.remove('bg-gold', 'hover:bg-yellow-500');
+                submitBtn.classList.add('bg-green-500');
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.add('bg-gold', 'hover:bg-yellow-500');
+                    submitBtn.classList.remove('bg-green-500');
+                    contactForm.reset();
+                }, 3000);
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
